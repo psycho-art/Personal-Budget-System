@@ -345,6 +345,7 @@
 
 ###  https://schema.org/Duration
 schema:Duration rdf:type owl:Class ;
+                rdfs:comment "A period of time." ;
                 rdfs:label "Duration" .
 
 
@@ -356,7 +357,7 @@ schema:FinancialProduct rdf:type owl:Class ;
 
 ###  https://schema.org/MonetaryAmount
 schema:MonetaryAmount rdf:type owl:Class ;
-                      rdfs:comment "Expense" ;
+                      rdfs:comment "A monetary value." ;
                       rdfs:label "Monetary Amount" .
 
 
@@ -368,6 +369,7 @@ schema:MonetaryGrant rdf:type owl:Class ;
 
 ###  https://schema.org/Person
 schema:Person rdf:type owl:Class ;
+              rdfs:comment "A human being." ;
               rdfs:label "Person" .
 
 
