@@ -157,13 +157,17 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5#endDate
 :endDate rdf:type owl:DatatypeProperty ;
          rdfs:domain schema:Duration ;
-         rdfs:range xsd:dateTime .
+         rdfs:range xsd:dateTime ;
+         rdfs:comment "Specifies the end date of a duration" ;
+         rdfs:label "end date" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5#startDate
 :startDate rdf:type owl:DatatypeProperty ;
            rdfs:domain schema:Duration ;
-           rdfs:range xsd:dateTime .
+           rdfs:range xsd:dateTime ;
+           rdfs:comment "Specifies the start date of a duration" ;
+           rdfs:label "start date" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/amount
@@ -370,7 +374,15 @@
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/User
 :User rdf:type owl:Class ;
-      rdfs:subClassOf schema:Person ;
+      rdfs:subClassOf schema:Person ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasExpense ;
+                        owl:allValuesFrom schema:MonetaryAmount
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasIncomeSource ;
+                        owl:someValuesFrom :IncomeSource
+                      ] ;
       rdfs:comment "Represents a user of the personal budget system." ;
       rdfs:label "User" .
 
