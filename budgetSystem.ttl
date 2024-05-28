@@ -27,23 +27,32 @@
 
 
 #################################################################
+#    Datatypes
+#################################################################
+
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Duration
+:Duration rdf:type rdfs:Datatype .
+
+
+###  http://www.w3.org/2001/XMLSchema#date
+xsd:date rdf:type rdfs:Datatype .
+
+
+#################################################################
 #    Object Properties
 #################################################################
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasExpense
 :hasExpense rdf:type owl:ObjectProperty ;
             owl:inverseOf :isExpenseOf ;
-            rdfs:domain schema:Person ;
-            rdfs:range schema:MonetaryAmount ;
-            rdfs:comment "Relates a person to their expenses" ;
+            rdfs:domain :User ;
+            rdfs:comment "Relates a user to their expenses" ;
             rdfs:label "has expense" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasExpenseCategory
 :hasExpenseCategory rdf:type owl:ObjectProperty ;
                     owl:inverseOf :isExpenseCategoryOf ;
-                    rdfs:domain schema:MonetaryAmount ;
-                    rdfs:range schema:FinancialProduct ;
                     rdfs:comment "Relates an expense to its category" ;
                     rdfs:label "has expense category" .
 
@@ -51,76 +60,55 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasFinancialGoal
 :hasFinancialGoal rdf:type owl:ObjectProperty ;
                   owl:inverseOf :isFinancialGoalOf ;
-                  rdfs:domain schema:Person ;
-                  rdfs:range schema:MonetaryGrant ;
-                  rdfs:comment "Relates a person to their financial goals" ;
+                  rdfs:domain :User ;
+                  rdfs:comment "Relates a user to their financial goals" ;
                   rdfs:label "has financial goal" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasIncomeSource
 :hasIncomeSource rdf:type owl:ObjectProperty ;
                  owl:inverseOf :isIncomeSourceOf ;
-                 rdfs:domain schema:Person ;
+                 rdfs:domain :User ;
                  rdfs:range :IncomeSource ;
-                 rdfs:comment "Relates a person to their sources of income" ;
+                 rdfs:comment "Relates a user to their sources of income" ;
                  rdfs:label "has income source" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasTimePeriod
 :hasTimePeriod rdf:type owl:ObjectProperty ;
-               owl:inverseOf :isTimePeriodOf ;
-               rdfs:domain [ rdf:type owl:Class ;
-                             owl:unionOf ( :IncomeSource
-                                           schema:FinancialProduct
-                                           schema:MonetaryAmount
-                                         )
-                           ] ;
-               rdfs:range schema:Duration ;
-               rdfs:comment "Relates an entity to a duration" ;
-               rdfs:label "has time period" .
+               owl:inverseOf :isTimePeriodOf .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isExpenseCategoryOf
 :isExpenseCategoryOf rdf:type owl:ObjectProperty ;
-                     rdfs:domain schema:FinancialProduct ;
-                     rdfs:range schema:MonetaryAmount ;
                      rdfs:comment "Relates a category to its expenses" ;
                      rdfs:label "is expense category of" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isExpenseOf
 :isExpenseOf rdf:type owl:ObjectProperty ;
-             rdfs:domain schema:MonetaryAmount ;
-             rdfs:range schema:Person ;
-             rdfs:comment "Relates an expense to the person it belongs to" ;
+             rdfs:range :User ;
+             rdfs:comment "Relates an expense to the user it belongs to" ;
              rdfs:label "is expense of" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isFinancialGoalOf
 :isFinancialGoalOf rdf:type owl:ObjectProperty ;
-                   rdfs:domain schema:MonetaryGrant ;
-                   rdfs:range schema:Person ;
-                   rdfs:comment "Relates a financial goal to the person it belongs to" ;
+                   rdfs:range :User ;
+                   rdfs:comment "Relates a financial goal to the user it belongs to" ;
                    rdfs:label "is financial goal of" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isIncomeSourceOf
 :isIncomeSourceOf rdf:type owl:ObjectProperty ;
                   rdfs:domain :IncomeSource ;
-                  rdfs:range schema:Person ;
-                  rdfs:comment "Relates an income source to the person it belongs to" ;
+                  rdfs:range :User ;
+                  rdfs:comment "Relates an income source to the user it belongs to" ;
                   rdfs:label "is income source of" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isTimePeriodOf
 :isTimePeriodOf rdf:type owl:ObjectProperty ;
-                rdfs:domain schema:Duration ;
-                rdfs:range [ rdf:type owl:Class ;
-                             owl:unionOf ( :IncomeSource
-                                           schema:FinancialProduct
-                                           schema:MonetaryAmount
-                                         )
-                           ] ;
                 rdfs:comment "Relates a duration to an entity" ;
                 rdfs:label "is time period of" .
 
@@ -129,22 +117,12 @@
 :isUsedIn rdf:type owl:ObjectProperty ;
           owl:inverseOf :usesCurrency ;
           rdfs:domain :Currency ;
-          rdfs:range [ rdf:type owl:Class ;
-                       owl:unionOf ( :IncomeSource
-                                     schema:MonetaryAmount
-                                   )
-                     ] ;
           rdfs:comment "Relates a currency to a monetary amount or income source" ;
           rdfs:label "is used in" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/usesCurrency
 :usesCurrency rdf:type owl:ObjectProperty ;
-              rdfs:domain [ rdf:type owl:Class ;
-                            owl:unionOf ( :IncomeSource
-                                          schema:MonetaryAmount
-                                        )
-                          ] ;
               rdfs:range :Currency ;
               rdfs:comment "Relates a monetary amount or income source to a currency" ;
               rdfs:label "uses currency" .
@@ -175,12 +153,31 @@
           rdfs:label "category" .
 
 
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/endDate
+:endDate rdf:type owl:DatatypeProperty ;
+         rdfs:range xsd:date ;
+         rdfs:comment "Specifies the end date of a duration" ;
+         rdfs:label "end date" .
+
+
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasTimePeriod
+:hasTimePeriod rdf:type owl:DatatypeProperty ;
+               rdfs:range :Duration .
+
+
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/sourceType
 :sourceType rdf:type owl:DatatypeProperty ;
             rdfs:domain :IncomeSource ;
             rdfs:range xsd:string ;
             rdfs:comment "Specifies the type of income source" ;
             rdfs:label "source type" .
+
+
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/startDate
+:startDate rdf:type owl:DatatypeProperty ;
+           rdfs:range xsd:date ;
+           rdfs:comment "Specifies the start date of a duration" ;
+           rdfs:label "start date" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/targetAmount
@@ -212,8 +209,8 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Bonus
 :Bonus rdf:type owl:Class ;
        rdfs:subClassOf :IncomeSource ;
-       owl:disjointWith :Salary ,
-                        :SideEarnings ;
+       owl:disjointWith :OtherEarnings ,
+                        :Salary ;
        rdfs:comment "Represents a bonus as a source of income." ;
        rdfs:label "Bonus" .
 
@@ -305,6 +302,14 @@
          rdfs:label "Monthly" .
 
 
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/OtherEarnings
+:OtherEarnings rdf:type owl:Class ;
+               rdfs:subClassOf :IncomeSource ;
+               owl:disjointWith :Salary ;
+               rdfs:comment "Represents other earnings as sources of income." ;
+               rdfs:label "Other Earnings" .
+
+
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Quarterly
 :Quarterly rdf:type owl:Class ;
            rdfs:subClassOf schema:Duration ;
@@ -323,7 +328,6 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Salary
 :Salary rdf:type owl:Class ;
         rdfs:subClassOf :IncomeSource ;
-        owl:disjointWith :SideEarnings ;
         rdfs:comment "Represents salary as a source of income." ;
         rdfs:label "Salary" .
 
@@ -333,13 +337,6 @@
             rdfs:subClassOf schema:Duration ;
             rdfs:comment "Represents a semi-annual duration." ;
             rdfs:label "Semi-Annual" .
-
-
-###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/SideEarnings
-:SideEarnings rdf:type owl:Class ;
-              rdfs:subClassOf :IncomeSource ;
-              rdfs:comment "Represents other earnings as sources of income." ;
-              rdfs:label "Other Earnings" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/TransportationCategory
@@ -422,6 +419,14 @@ schema:Person rdf:type owl:Class ;
 :Waleed rdf:type owl:NamedIndividual ;
         rdfs:comment "An individual user named Waleed" ;
         rdfs:label "Waleed" .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+:hasTimePeriod rdfs:comment "Relates an entity to a duration" ;
+               rdfs:label "has time period" .
 
 
 ###  Generated by the OWL API (version 4.5.26.2023-07-17T20:34:13Z) https://github.com/owlcs/owlapi
