@@ -49,6 +49,7 @@
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasFinancialGoal
 :hasFinancialGoal rdf:type owl:ObjectProperty ;
+                  owl:inverseOf :isFinancialGoalOf ;
                   rdfs:domain schema:Person ;
                   rdfs:range schema:MonetaryGrant ;
                   rdfs:comment "Relates a person to their financial goals" ;
@@ -83,6 +84,14 @@
              rdfs:range schema:Person ;
              rdfs:comment "Relates an expense to the person it belongs to" ;
              rdfs:label "is expense of" .
+
+
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isFinancialGoalOf
+:isFinancialGoalOf rdf:type owl:ObjectProperty ;
+                   rdfs:domain schema:MonetaryGrant ;
+                   rdfs:range schema:Person ;
+                   rdfs:comment "Relates a financial goal to the person it belongs to" ;
+                   rdfs:label "is financial goal of" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isIncomeSourceOf
@@ -180,6 +189,8 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Bonus
 :Bonus rdf:type owl:Class ;
        rdfs:subClassOf :IncomeSource ;
+       owl:disjointWith :OtherEarnings ,
+                        :Salary ;
        rdfs:comment "Represents a bonus as a source of income." ;
        rdfs:label "Bonus" .
 
@@ -193,6 +204,8 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Entertainment
 :Entertainment rdf:type owl:Class ;
                rdfs:subClassOf schema:MonetaryAmount ;
+               owl:disjointWith :Groceries ,
+                                :Utilities ;
                rdfs:comment "Represents entertainment expenses." ;
                rdfs:label "Entertainment" .
 
@@ -214,6 +227,7 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/FoodCategory
 :FoodCategory rdf:type owl:Class ;
               rdfs:subClassOf schema:FinancialProduct ;
+              owl:disjointWith :HealthcareCategory ;
               rdfs:comment "Represents categories of food expenses." ;
               rdfs:label "Food Category" .
 
@@ -228,6 +242,7 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/HealthcareCategory
 :HealthcareCategory rdf:type owl:Class ;
                     rdfs:subClassOf schema:FinancialProduct ;
+                    owl:disjointWith :TransportationCategory ;
                     rdfs:comment "Represents categories of healthcare expenses." ;
                     rdfs:label "Healthcare Category" .
 
@@ -235,6 +250,7 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/HomeBuying
 :HomeBuying rdf:type owl:Class ;
             rdfs:subClassOf schema:MonetaryGrant ;
+            owl:disjointWith :VacationSaving ;
             rdfs:comment "Represents home buying as a financial goal." ;
             rdfs:label "Home Buying" .
 
@@ -283,6 +299,7 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Retirement
 :Retirement rdf:type owl:Class ;
             rdfs:subClassOf schema:MonetaryGrant ;
+            owl:disjointWith :VacationSaving ;
             rdfs:comment "Represents retirement as a financial goal." ;
             rdfs:label "Retirement" .
 
