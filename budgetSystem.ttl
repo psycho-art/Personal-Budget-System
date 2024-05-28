@@ -7,7 +7,24 @@
 @prefix schema: <https://schema.org/> .
 @base <http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/> .
 
-<http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5> rdf:type owl:Ontology .
+<http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5> rdf:type owl:Ontology ;
+                                                                               <http://purl.org/dc/terms/creator> "Your Name" ;
+                                                                               <http://purl.org/dc/terms/date> "2024-05-28" ;
+                                                                               rdfs:comment "This ontology represents a personal budget management system." ;
+                                                                               rdfs:label "Personal Budget System Ontology" ;
+                                                                               owl:versionInfo "1.0" .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/creator
+<http://purl.org/dc/terms/creator> rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/date
+<http://purl.org/dc/terms/date> rdf:type owl:AnnotationProperty .
+
 
 #################################################################
 #    Object Properties
@@ -15,41 +32,90 @@
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasExpense
 :hasExpense rdf:type owl:ObjectProperty ;
+            owl:inverseOf :isExpenseOf ;
             rdfs:domain schema:Person ;
-            rdfs:range schema:MonetaryAmount .
+            rdfs:range schema:MonetaryAmount ;
+            rdfs:comment "Relates a person to their expenses" ;
+            rdfs:label "has expense" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasExpenseCategory
 :hasExpenseCategory rdf:type owl:ObjectProperty ;
                     rdfs:domain schema:MonetaryAmount ;
-                    rdfs:range schema:FinancialProduct .
+                    rdfs:range schema:FinancialProduct ;
+                    rdfs:comment "Relates an expense to its category" ;
+                    rdfs:label "has expense category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasFinancialGoal
 :hasFinancialGoal rdf:type owl:ObjectProperty ;
                   rdfs:domain schema:Person ;
-                  rdfs:range schema:MonetaryGrant .
+                  rdfs:range schema:MonetaryGrant ;
+                  rdfs:comment "Relates a person to their financial goals" ;
+                  rdfs:label "has financial goal" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasIncomeSource
 :hasIncomeSource rdf:type owl:ObjectProperty ;
+                 owl:inverseOf :isIncomeSourceOf ;
                  rdfs:domain schema:Person ;
-                 rdfs:range :IncomeSource .
+                 rdfs:range :IncomeSource ;
+                 rdfs:comment "Relates a person to their sources of income" ;
+                 rdfs:label "has income source" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasTimePeriod
 :hasTimePeriod rdf:type owl:ObjectProperty ;
-               rdfs:domain schema:FinancialProduct ,
-                           schema:MonetaryAmount ,
-                           :IncomeSource ;
-               rdfs:range schema:Duration .
+               rdfs:domain [ rdf:type owl:Class ;
+                             owl:unionOf ( :IncomeSource
+                                           schema:FinancialProduct
+                                           schema:MonetaryAmount
+                                         )
+                           ] ;
+               rdfs:range schema:Duration ;
+               rdfs:comment "Relates an entity to a duration" ;
+               rdfs:label "has time period" .
+
+
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isExpenseOf
+:isExpenseOf rdf:type owl:ObjectProperty ;
+             rdfs:domain schema:MonetaryAmount ;
+             rdfs:range schema:Person ;
+             rdfs:comment "Relates an expense to the person it belongs to" ;
+             rdfs:label "is expense of" .
+
+
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isIncomeSourceOf
+:isIncomeSourceOf rdf:type owl:ObjectProperty ;
+                  rdfs:domain :IncomeSource ;
+                  rdfs:range schema:Person ;
+                  rdfs:comment "Relates an income source to the person it belongs to" ;
+                  rdfs:label "is income source of" .
+
+
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isUsedIn
+:isUsedIn rdf:type owl:ObjectProperty ;
+          owl:inverseOf :usesCurrency ;
+          rdfs:domain :Currency ;
+          rdfs:range [ rdf:type owl:Class ;
+                       owl:unionOf ( :IncomeSource
+                                     schema:MonetaryAmount
+                                   )
+                     ] ;
+          rdfs:comment "Relates a currency to a monetary amount or income source" ;
+          rdfs:label "is used in" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/usesCurrency
 :usesCurrency rdf:type owl:ObjectProperty ;
-              rdfs:domain schema:MonetaryAmount ,
-                          :IncomeSource ;
-              rdfs:range :Currency .
+              rdfs:domain [ rdf:type owl:Class ;
+                            owl:unionOf ( :IncomeSource
+                                          schema:MonetaryAmount
+                                        )
+                          ] ;
+              rdfs:range :Currency ;
+              rdfs:comment "Relates a monetary amount or income source to a currency" ;
+              rdfs:label "uses currency" .
 
 
 #################################################################
@@ -58,191 +124,261 @@
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/amount
 :amount rdf:type owl:DatatypeProperty ;
-        rdfs:domain schema:MonetaryAmount ,
-                    schema:MonetaryGrant ,
-                    :IncomeSource ;
-        rdfs:range xsd:decimal .
+        rdfs:domain [ rdf:type owl:Class ;
+                      owl:unionOf ( :IncomeSource
+                                    schema:MonetaryAmount
+                                    schema:MonetaryGrant
+                                  )
+                    ] ;
+        rdfs:range xsd:decimal ;
+        rdfs:comment "Specifies the amount of a monetary value" ;
+        rdfs:label "amount" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/category
 :category rdf:type owl:DatatypeProperty ;
           rdfs:domain schema:MonetaryAmount ;
-          rdfs:range xsd:string .
+          rdfs:range xsd:string ;
+          rdfs:comment "Specifies the category of a monetary amount" ;
+          rdfs:label "category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/sourceType
 :sourceType rdf:type owl:DatatypeProperty ;
             rdfs:domain :IncomeSource ;
-            rdfs:range xsd:string .
+            rdfs:range xsd:string ;
+            rdfs:comment "Specifies the type of income source" ;
+            rdfs:label "source type" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/targetAmount
 :targetAmount rdf:type owl:DatatypeProperty ;
               rdfs:domain schema:MonetaryGrant ;
-              rdfs:range xsd:decimal .
+              rdfs:range xsd:decimal ;
+              rdfs:comment "Specifies the target amount for a financial goal" ;
+              rdfs:label "target amount" .
 
 
 #################################################################
 #    Classes
 #################################################################
 
-###  https://schema.org/Duration
-schema:Duration rdf:type owl:Class .
-
-
-###  https://schema.org/FinancialProduct
-schema:FinancialProduct rdf:type owl:Class ;
-                        rdfs:comment "Expense Categories" .
-
-
-###  https://schema.org/MonetaryAmount
-schema:MonetaryAmount rdf:type owl:Class ;
-                      rdfs:comment "Expense" .
-
-
-###  https://schema.org/MonetaryGrant
-schema:MonetaryGrant rdf:type owl:Class ;
-                     rdfs:comment "Financial Goal" .
-
-
-###  https://schema.org/Person
-schema:Person rdf:type owl:Class .
-
-
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Annual
 :Annual rdf:type owl:Class ;
-        rdfs:subClassOf schema:Duration .
+        rdfs:subClassOf schema:Duration ;
+        rdfs:comment "Represents an annual duration." ;
+        rdfs:label "Annual" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Bills
 :Bills rdf:type owl:Class ;
-       rdfs:subClassOf schema:MonetaryAmount .
+       rdfs:subClassOf schema:MonetaryAmount ;
+       rdfs:comment "Represents bills as a monetary amount." ;
+       rdfs:label "Bills" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Bonus
 :Bonus rdf:type owl:Class ;
-       rdfs:subClassOf :IncomeSource .
+       rdfs:subClassOf :IncomeSource ;
+       rdfs:comment "Represents a bonus as a source of income." ;
+       rdfs:label "Bonus" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Currency
-:Currency rdf:type owl:Class .
+:Currency rdf:type owl:Class ;
+          rdfs:comment "Represents different types of currencies." ;
+          rdfs:label "Currency" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Entertainment
 :Entertainment rdf:type owl:Class ;
-               rdfs:subClassOf schema:MonetaryAmount .
+               rdfs:subClassOf schema:MonetaryAmount ;
+               rdfs:comment "Represents entertainment expenses." ;
+               rdfs:label "Entertainment" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/EntertainmentCategory
 :EntertainmentCategory rdf:type owl:Class ;
-                       rdfs:subClassOf schema:FinancialProduct .
+                       rdfs:subClassOf schema:FinancialProduct ;
+                       rdfs:comment "Represents categories of entertainment expenses." ;
+                       rdfs:label "Entertainment Category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Food
 :Food rdf:type owl:Class ;
-      rdfs:subClassOf schema:MonetaryAmount .
+      rdfs:subClassOf schema:MonetaryAmount ;
+      rdfs:comment "Represents food expenses." ;
+      rdfs:label "Food" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/FoodCategory
 :FoodCategory rdf:type owl:Class ;
-              rdfs:subClassOf schema:FinancialProduct .
+              rdfs:subClassOf schema:FinancialProduct ;
+              rdfs:comment "Represents categories of food expenses." ;
+              rdfs:label "Food Category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Groceries
 :Groceries rdf:type owl:Class ;
-           rdfs:subClassOf schema:MonetaryAmount .
+           rdfs:subClassOf schema:MonetaryAmount ;
+           rdfs:comment "Represents grocery expenses." ;
+           rdfs:label "Groceries" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/HealthcareCategory
 :HealthcareCategory rdf:type owl:Class ;
-                    rdfs:subClassOf schema:FinancialProduct .
+                    rdfs:subClassOf schema:FinancialProduct ;
+                    rdfs:comment "Represents categories of healthcare expenses." ;
+                    rdfs:label "Healthcare Category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/HomeBuying
 :HomeBuying rdf:type owl:Class ;
-            rdfs:subClassOf schema:MonetaryGrant .
+            rdfs:subClassOf schema:MonetaryGrant ;
+            rdfs:comment "Represents home buying as a financial goal." ;
+            rdfs:label "Home Buying" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/HousingCategory
 :HousingCategory rdf:type owl:Class ;
-                 rdfs:subClassOf schema:FinancialProduct .
+                 rdfs:subClassOf schema:FinancialProduct ;
+                 rdfs:comment "Represents categories of housing expenses." ;
+                 rdfs:label "Housing Category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/IncomeSource
-:IncomeSource rdf:type owl:Class .
+:IncomeSource rdf:type owl:Class ;
+              rdfs:comment "Represents different sources of income." ;
+              rdfs:label "Income Source" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/InsuranceCategory
 :InsuranceCategory rdf:type owl:Class ;
-                   rdfs:subClassOf schema:FinancialProduct .
+                   rdfs:subClassOf schema:FinancialProduct ;
+                   rdfs:comment "Represents categories of insurance expenses." ;
+                   rdfs:label "Insurance Category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Monthly
 :Monthly rdf:type owl:Class ;
-         rdfs:subClassOf schema:Duration .
+         rdfs:subClassOf schema:Duration ;
+         rdfs:comment "Represents a monthly duration." ;
+         rdfs:label "Monthly" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/OtherEarnings
 :OtherEarnings rdf:type owl:Class ;
-               rdfs:subClassOf :IncomeSource .
+               rdfs:subClassOf :IncomeSource ;
+               rdfs:comment "Represents other earnings as sources of income." ;
+               rdfs:label "Other Earnings" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Quarterly
 :Quarterly rdf:type owl:Class ;
-           rdfs:subClassOf schema:Duration .
+           rdfs:subClassOf schema:Duration ;
+           rdfs:comment "Represents a quarterly duration." ;
+           rdfs:label "Quarterly" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Retirement
 :Retirement rdf:type owl:Class ;
-            rdfs:subClassOf schema:MonetaryGrant .
+            rdfs:subClassOf schema:MonetaryGrant ;
+            rdfs:comment "Represents retirement as a financial goal." ;
+            rdfs:label "Retirement" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Salary
 :Salary rdf:type owl:Class ;
-        rdfs:subClassOf :IncomeSource .
+        rdfs:subClassOf :IncomeSource ;
+        rdfs:comment "Represents salary as a source of income." ;
+        rdfs:label "Salary" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/SemiAnnual
 :SemiAnnual rdf:type owl:Class ;
-            rdfs:subClassOf schema:Duration .
+            rdfs:subClassOf schema:Duration ;
+            rdfs:comment "Represents a semi-annual duration." ;
+            rdfs:label "Semi-Annual" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/TransportationCategory
 :TransportationCategory rdf:type owl:Class ;
-                        rdfs:subClassOf schema:FinancialProduct .
+                        rdfs:subClassOf schema:FinancialProduct ;
+                        rdfs:comment "Represents categories of transportation expenses." ;
+                        rdfs:label "Transportation Category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Travel
 :Travel rdf:type owl:Class ;
-        rdfs:subClassOf schema:MonetaryAmount .
+        rdfs:subClassOf schema:MonetaryAmount ;
+        rdfs:comment "Represents travel expenses." ;
+        rdfs:label "Travel" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/User
 :User rdf:type owl:Class ;
-      rdfs:subClassOf schema:Person .
+      rdfs:subClassOf schema:Person ;
+      rdfs:comment "Represents a user of the personal budget system." ;
+      rdfs:label "User" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Utilities
 :Utilities rdf:type owl:Class ;
-           rdfs:subClassOf schema:MonetaryAmount .
+           rdfs:subClassOf schema:MonetaryAmount ;
+           rdfs:comment "Represents utilities expenses." ;
+           rdfs:label "Utilities" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/UtilitiesCategory
 :UtilitiesCategory rdf:type owl:Class ;
-                   rdfs:subClassOf schema:FinancialProduct .
+                   rdfs:subClassOf schema:FinancialProduct ;
+                   rdfs:comment "Represents categories of utilities expenses." ;
+                   rdfs:label "Utilities Category" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/VacationSaving
 :VacationSaving rdf:type owl:Class ;
-                rdfs:subClassOf schema:MonetaryGrant .
+                rdfs:subClassOf schema:MonetaryGrant ;
+                rdfs:comment "Represents savings set aside for vacations." ;
+                rdfs:label "Vacation Saving" .
+
+
+###  https://schema.org/Duration
+schema:Duration rdf:type owl:Class ;
+                rdfs:label "Duration" .
+
+
+###  https://schema.org/FinancialProduct
+schema:FinancialProduct rdf:type owl:Class ;
+                        rdfs:comment "Expense Categories" ;
+                        rdfs:label "Financial Product" .
+
+
+###  https://schema.org/MonetaryAmount
+schema:MonetaryAmount rdf:type owl:Class ;
+                      rdfs:comment "Expense" ;
+                      rdfs:label "Monetary Amount" .
+
+
+###  https://schema.org/MonetaryGrant
+schema:MonetaryGrant rdf:type owl:Class ;
+                     rdfs:comment "Financial Goal" ;
+                     rdfs:label "Monetary Grant" .
+
+
+###  https://schema.org/Person
+schema:Person rdf:type owl:Class ;
+              rdfs:label "Person" .
 
 
 #################################################################
 #    Individuals
 #################################################################
 
-###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5#Waleed
-:Waleed rdf:type owl:NamedIndividual ,
-                 :User .
+###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Waleed
+:Waleed rdf:type owl:NamedIndividual ;
+        rdfs:comment "An individual user named Waleed" ;
+        rdfs:label "Waleed" .
+
 
 ###  Generated by the OWL API (version 4.5.26.2023-07-17T20:34:13Z) https://github.com/owlcs/owlapi
