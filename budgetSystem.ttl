@@ -41,10 +41,17 @@
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasExpenseCategory
 :hasExpenseCategory rdf:type owl:ObjectProperty ;
+                    owl:inverseOf :isExpenseCategoryOf ;
                     rdfs:domain schema:MonetaryAmount ;
                     rdfs:range schema:FinancialProduct ;
                     rdfs:comment "Relates an expense to its category" ;
                     rdfs:label "has expense category" .
+
+:isExpenseCategoryOf rdf:type owl:ObjectProperty ;
+                     rdfs:domain schema:FinancialProduct ;
+                     rdfs:range schema:MonetaryAmount ;
+                     rdfs:comment "Relates a category to its expenses" ;
+                     rdfs:label "is expense category of" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasFinancialGoal
@@ -67,6 +74,7 @@
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/hasTimePeriod
 :hasTimePeriod rdf:type owl:ObjectProperty ;
+               owl:inverseOf :isTimePeriodOf ;
                rdfs:domain [ rdf:type owl:Class ;
                              owl:unionOf ( :IncomeSource
                                            schema:FinancialProduct
@@ -76,6 +84,17 @@
                rdfs:range schema:Duration ;
                rdfs:comment "Relates an entity to a duration" ;
                rdfs:label "has time period" .
+
+:isTimePeriodOf rdf:type owl:ObjectProperty ;
+                rdfs:domain schema:Duration ;
+                rdfs:range [ rdf:type owl:Class ;
+                             owl:unionOf ( :IncomeSource
+                                           schema:FinancialProduct
+                                           schema:MonetaryAmount
+                                         )
+                           ] ;
+                rdfs:comment "Relates a duration to an entity" ;
+                rdfs:label "is time period of" .
 
 
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/isExpenseOf
@@ -285,6 +304,8 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/OtherEarnings
 :OtherEarnings rdf:type owl:Class ;
                rdfs:subClassOf :IncomeSource ;
+               owl:disjointWith :Bonus ,
+                                :Salary ;
                rdfs:comment "Represents other earnings as sources of income." ;
                rdfs:label "Other Earnings" .
 
@@ -307,6 +328,8 @@
 ###  http://www.semanticweb.org/macbookpro/ontologies/2024/4/untitled-ontology-5/Salary
 :Salary rdf:type owl:Class ;
         rdfs:subClassOf :IncomeSource ;
+        owl:disjointWith :Bonus ,
+                         :OtherEarnings ;
         rdfs:comment "Represents salary as a source of income." ;
         rdfs:label "Salary" .
 
